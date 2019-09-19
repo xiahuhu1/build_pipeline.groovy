@@ -1,0 +1,18 @@
+node {
+    env.BUILD_DIR = "/root/build-workspace"
+    env.MODULE = "web-demo"
+    env.HOST = "k8s-web-demo.com"
+   stage('git pull code') { //git 代码
+      git 'https://github.com/xiahuhu1/k8s-web-demo.git '
+   }
+   stage('Maven build') { //maven 构建
+       sh 'mvn -pl ${MODULE} -am clean package'
+   }
+   stage('Build Image'){ // build image
+       sh '/root/script/build-image-web.sh'
+   }
+   stage('Deploy To k8s'){ // deploy image
+       sh '/root/script/deploy.sh'
+   }
+   
+}  
